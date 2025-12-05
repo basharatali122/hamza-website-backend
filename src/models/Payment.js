@@ -1,45 +1,54 @@
-import { DataTypes, Model } from "sequelize";
-import connection from "../config/database.js";
-import { v4 as uuid } from "uuid";
+// Payment.js
+import { DataTypes } from 'sequelize';
+import  sequelize  from '../config/database.js';
 
-// Import Orders model for foreign key reference
-import Order from "./Orders.js";
-
-class Payment extends Model {}
-
-Payment.init(
-  {
-    paymentId: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: uuid,
-    },
-    orderId: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      references: { model: Order, key: "orderId" },
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
-    },
-    amount: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    method: {
-      type: DataTypes.ENUM("card", "paypal", "cod"),
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.ENUM("pending", "completed", "failed"),
-      defaultValue: "pending",
-    },
+const Payment = sequelize.define('Payment', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
   },
-  {
-    sequelize: connection,
-    modelName: "Payment",
-    tableName: "payments",
-    timestamps: true,
+  order_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Orders',
+      key: 'id'
+    }
+  },
+  transaction_id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'transactions',
+      key: 'id'
+    }
+  },
+  payment_method: {
+    type: DataTypes.ENUM('zindigi', 'wallet', 'card', 'mixed'),
+    allowNull: false
+  },
+  amount_paid: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false
+  },
+  wallet_amount_used: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0.00
+  },
+  gateway_amount: {
+    type: DataTypes.DECIMAL(10, 2),
+    defaultValue: 0.00
+  },
+  payment_status: {
+    type: DataTypes.ENUM('pending', 'completed', 'failed', 'refunded'),
+    defaultValue: 'pending'
+  },
+  zindigi_response: {
+    type: DataTypes.JSON
   }
-);
+}, {
+  tableName: 'payments',
+  timestamps: true
+});
 
 export default Payment;

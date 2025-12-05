@@ -27,6 +27,11 @@ import wishlistRoutes from "./src/routes/wishlist.route.js";
 import categoryRoutes from "./src/routes/category.route.js";
 import teamDepth from "./src/routes/team.route.js";
 
+
+import walletRoutes from './src/routes/wallet.route.js';
+import withdrawalRoutes from './src/routes/withdrawal.route.js';
+import paymentRoutes from './src/routes/payment.route.js';
+
 // Security Middleware
 app.use(
   helmet({
@@ -114,6 +119,13 @@ app.use("/api/referral", referralRoutes);
 app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/team", teamDepth);
+
+
+// Register routes
+app.use('/api/wallet', walletRoutes);
+app.use('/api/withdrawal', withdrawalRoutes);
+app.use('/api/payment', paymentRoutes);
+
 
 // API Documentation endpoint
 app.get("/api", (req, res) => {

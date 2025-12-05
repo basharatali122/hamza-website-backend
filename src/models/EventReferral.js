@@ -35,7 +35,19 @@ ReferralEvent.init(
     tier: {
       type: DataTypes.INTEGER,
       defaultValue: 1
-    }
+    },
+    // Add to existing EventReferral model
+bonus_percentage: {
+  type: DataTypes.DECIMAL(5, 2),
+  defaultValue: 5.00,
+  comment: 'Percentage bonus on referral signup'
+},
+topup_bonus_percentage: {
+  type: DataTypes.DECIMAL(5, 2),
+  defaultValue: 10.00,
+  comment: 'Bonus percentage when user adds balance'
+}
+
   },
   {
     sequelize: connection,
